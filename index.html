@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absensi Expo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col justify-center items-center p-6">
+  <h1 class="text-3xl font-bold mb-6 text-center">Selamat Datang di Absensi Expo SMKN 3 Payakumbuh</h1>
+  <div class="space-x-4">
+    <button id="btnGuru" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-xl shadow transition">Masuk sebagai Guru</button>
+    <button id="btnSiswa" class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl shadow transition">Masuk sebagai Siswa</button>
+    <button id="btnAdmin" class="fixed bottom-4 right-4 bg-gray-700 hover:bg-gray-800 text-white p-4 rounded-full shadow-lg transition">Admin</button>
+  </div>
+
+  <div id="formGuru" class="hidden mt-8 w-full max-w-md bg-gray-800 p-6 rounded-xl shadow">
+    <h2 class="text-xl font-semibold mb-4">Form Guru</h2>
+    <input id="namaGuru" type="text" placeholder="Nama Lengkap" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+    <input id="mapelGuru" type="text" placeholder="Mata Pelajaran" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+    <button id="submitGuru" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-xl shadow">Kirim</button>
+  </div>
+
+  <div id="formSiswa" class="hidden mt-8 w-full max-w-md bg-gray-800 p-6 rounded-xl shadow">
+    <h2 class="text-xl font-semibold mb-4">Form Siswa</h2>
+    <input id="namaSiswa" type="text" placeholder="Nama Lengkap" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+    <input id="kelasSiswa" type="text" placeholder="Kelas" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+    <input id="asalSiswa" type="text" placeholder="Asal Sekolah" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+    <button id="submitSiswa" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl shadow">Kirim</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKn6AnyFBAVKIZW0hkdUl2rxRPKuEg_uE",
+      authDomain: "projects-tkj.firebaseapp.com",
+      databaseURL: "https://projects-tkj-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "projects-tkj",
+      storageBucket: "projects-tkj.firebasestorage.app",
+      messagingSenderId: "1068028451955",
+      appId: "1:1068028451955:web:3b157a492ddcb062199e06",
+      measurementId: "G-4Y9REYFPCN"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    document.getElementById('btnGuru').onclick = () => {
+      document.getElementById('formGuru').classList.remove('hidden');
+      document.getElementById('formSiswa').classList.add('hidden');
+    };
+    document.getElementById('btnSiswa').onclick = () => {
+      document.getElementById('formSiswa').classList.remove('hidden');
+      document.getElementById('formGuru').classList.add('hidden');
+    };
+    document.getElementById('btnAdmin').onclick = () => {
+      const pass = prompt('Masukkan sandi admin:');
+      if (pass === 'tkjuser0987') window.location.href = 'admin.html';
+      else alert('Sandi salah!');
+    };
+    document.getElementById('submitGuru').onclick = () => {
+      const nama = document.getElementById('namaGuru').value;
+      const mapel = document.getElementById('mapelGuru').value;
+      const waktu = new Date().toLocaleString();
+      if (nama && mapel) {
+        db.ref('guru').push({ nama, mapel, waktu });
+        alert('Data Guru Terkirim!');
+        document.getElementById('namaGuru').value = '';
+        document.getElementById('mapelGuru').value = '';
+      } else alert('Lengkapi data!');
+    };
+    document.getElementById('submitSiswa').onclick = () => {
+      const nama = document.getElementById('namaSiswa').value;
+      const kelas = document.getElementById('kelasSiswa').value;
+      const asal = document.getElementById('asalSiswa').value;
+      const waktu = new Date().toLocaleString();
+      if (nama && kelas && asal) {
+        db.ref('siswa').push({ nama, kelas, asal, waktu });
+        alert('Data Siswa Terkirim!');
+        document.getElementById('namaSiswa').value = '';
+        document.getElementById('kelasSiswa').value = '';
+        document.getElementById('asalSiswa').value = '';
+      } else alert('Lengkapi data!');
+    };
+  </script>
+</body>
+</html>

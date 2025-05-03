@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Absensi Expo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-4">
+  <h1 class="text-3xl font-bold mb-4 text-center">Data Absensi Expo SMKN 3 Payakumbuh</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <h2 class="text-2xl font-semibold mb-2">Guru</h2>
+      <table class="w-full bg-gray-800 rounded-xl overflow-hidden text-left">
+        <thead><tr><th class="p-2">Nama</th><th class="p-2">Mapel</th><th class="p-2">Waktu</th></tr></thead>
+        <tbody id="tabelGuru"></tbody>
+      </table>
+    </div>
+    <div>
+      <h2 class="text-2xl font-semibold mb-2">Siswa</h2>
+      <table class="w-full bg-gray-800 rounded-xl overflow-hidden text-left">
+        <thead><tr><th class="p-2">Nama</th><th class="p-2">Kelas</th><th class="p-2">Asal</th><th class="p-2">Waktu</th></tr></thead>
+        <tbody id="tabelSiswa"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKn6AnyFBAVKIZW0hkdUl2rxRPKuEg_uE",
+      authDomain: "projects-tkj.firebaseapp.com",
+      databaseURL: "https://projects-tkj-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "projects-tkj",
+      storageBucket: "projects-tkj.firebasestorage.app",
+      messagingSenderId: "1068028451955",
+      appId: "1:1068028451955:web:3b157a492ddcb062199e06",
+      measurementId: "G-4Y9REYFPCN"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    db.ref('guru').on('value', (snapshot) => {
+      const tabelGuru = document.getElementById('tabelGuru');
+      tabelGuru.innerHTML = '';
+      snapshot.forEach(data => {
+        const { nama, mapel, waktu } = data.val();
+        tabelGuru.innerHTML += `<tr><td class="p-2">${nama}</td><td class="p-2">${mapel}</td><td class="p-2">${waktu}</td></tr>`;
+      });
+    });
+
+    db.ref('siswa').on('value', (snapshot) => {
+      const tabelSiswa = document.getElementById('tabelSiswa');
+      tabelSiswa.innerHTML = '';
+      snapshot.forEach(data => {
+        const { nama, kelas, asal, waktu } = data.val();
+        tabelSiswa.innerHTML += `<tr><td class="p-2">${nama}</td><td class="p-2">${kelas}</td><td class="p-2">${asal}</td><td class="p-2">${waktu}</td></tr>`;
+      });
+    });
+  </script>
+</body>
+</html>
